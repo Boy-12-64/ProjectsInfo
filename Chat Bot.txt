@@ -1,0 +1,88 @@
+import nltk
+import random
+from nltk.chat.util import Chat, reflections
+
+# Define pairs of patterns and responses for the chatbot
+pairs = [
+    [
+        r"my name is (.*)",
+        ["Hello %1! How can I assist you today?"]
+    ],
+    [
+        r"hi|hello|hey",
+        ["Hello!", "Hey there!", "Hi! How can I help you?"]
+    ],
+    [
+        r"what is your name?",
+        ["You can call me ChatBot.", "I'm ChatBot, nice to meet you!"]
+    ],
+    [
+        r"how are you ?",
+        ["I'm doing well, thank you!", "I'm great! How about you?"]
+    ],
+    [
+        r"sorry (.*)",
+        ["No problem.", "Don't worry about it.", "It's alright."]
+    ],
+    [
+        r"(.*) (hungry|sleepy|tired)",
+        [
+            "I can understand. Please take a break and relax.",
+            "If possible, try to grab a snack or take a short nap.",
+        ],
+    ],
+    [
+        r"what (can|should) I (call|name) you ?",
+        ["You can call me ChatBot.", "I'm ChatBot, nice to meet you!"]
+    ],
+    [
+        r"tell me a joke|(.*) joke",
+        ["Why don't scientists trust atoms? Because they make up everything!"]
+    ],
+    [
+        r"how old are you ?",
+        ["I don't have an age. I'm a chatbot."]
+    ],
+    [
+        r"(.*) (weather|temperature) ?",
+        ["Sorry, I cannot provide real-time weather information."],
+    ],
+    [
+        r"(.*) (movie|film) ?",
+        ["I love movies! What genre are you interested in?"]
+    ],
+    [
+        r"(.*)(comedy)",
+        ["Comedies are great for a good laugh! Any specific movie in mind?"]
+    ],
+    [
+        r"(.*)(action|adventure)",
+        ["Action and adventure movies are thrilling! Do you have a favorite?"]
+    ],
+    [
+        r"(.*)(drama)",
+        ["Drama movies can be emotionally impactful. Any particular one you like?"]
+    ],
+    [
+        r"quit",
+        ["It was nice talking to you. Goodbye!", "Goodbye! Have a great day!"]
+    ]
+]
+
+# Create a chatbot using the defined patterns and responses
+chatbot = Chat(pairs, reflections)
+
+# Start the chatbot conversation
+print("ChatBot: Hi! How can I assist you today?")
+
+# Chat loop
+while True:
+    user_input = input("User: ")
+
+    # Check for 'quit' command to end the conversation
+    if user_input.lower() == 'quit':
+        break
+
+    # Generate a response from the chatbot
+    response = chatbot.respond(user_input)
+    print("ChatBot:", response)

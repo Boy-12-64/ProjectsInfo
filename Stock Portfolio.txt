@@ -1,0 +1,67 @@
+import sqlite3
+
+# Connect to the database
+conn = sqlite3.connect('portfolio.db')
+c = conn.cursor()
+
+# Create the table if it doesn't exist
+c.execute('''CREATE TABLE IF NOT EXISTS portfolio (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                symbol TEXT,
+                quantity INTEGER,
+                purchase_price REAL,
+                purchase_date TEXT
+            )''')
+
+# Function to add a stock to the portfolio
+def add_stock(symbol, quantity, purchase_price, purchase_date):
+    c.execute("INSERT INTO portfolio (symbol, quantity, purchase_price, purchase_date) VALUES (?, ?, ?, ?)",
+              (symbol, quantity, purchase_price, purchase_date))
+    conn.commit()
+    print("Stock added successfully!")
+
+# Function to view the portfolio
+def view_portfolio():
+    c.execute("SELECT * FROM portfolio")
+    rows = c.fetchall()
+    if len(rows) == 0:
+        print("Portfolio is empty.")
+    else:
+        print("Portfolio:")
+        for row in rows:
+            print(f"ID: {row[0]}, Symbol: {row[1]}, Quantity: {row[2]}, Purchase Price: {row[3]}, Purchase Date: {row[4]}")
+
+# Function to calculate the current value of the portfolio
+def calculate_portfolio_value():
+    c.execute("SELECT symbol, quantity, purchase_price FROM portfolio")
+    rows = c.fetchall()
+    portfolio_value = 0.0
+    for row in rows:
+        symbol = row[0]
+        quantity = row[1]
+        purchase_price = row[2]
+        # Fetch the current stock price using an API or other methods
+        current_price = get_current_stock_price(symbol)
+        stock_value = current_price * quantity
+        portfolio_value += stock_value
+    return portfolio_value
+
+# Placeholder function to fetch the current stock price (replace with your implementation)
+def get_current_stock_price(symbol):
+    # Replace this with actual implementation to fetch the stock price from an API or other methods
+    return 0.0
+
+# Add a stock to the portfolio
+add_stock("AAPL", 10, 150.25, "2023-07-01")
+add_stock("GOOG", 5, 2500.75, "2023-07-05")
+
+# View the portfolio
+view_portfolio()
+
+# Calculate the portfolio value
+portfolio_value = calculate_portfolio_value()
+print(f"Portfolio Value: {portfolio_value}")
+
+# Close the database connection
+conn.close()
+
